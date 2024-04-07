@@ -40,6 +40,8 @@ libdb.so/hserve v0.0.0-20230404043009-95e112a6e0a5 h1:EoO8WHF7uWQuvqBRgnt0wsvG9u
 libdb.so/hserve v0.0.0-20230404043009-95e112a6e0a5/go.mod h1:ZGoXSA4bL8Czb67YFYN3Uiy7Hvind5RhMSQgU6k4sq8=
 libdb.so/periph-gpioc v0.0.0-20240407074043-7cf3d1d750c3 h1:chlCsabeeRbDAYCCvhyAUET6045ifioMbY7umnqJkag=
 libdb.so/periph-gpioc v0.0.0-20240407074043-7cf3d1d750c3/go.mod h1:bN/uLxqRHYj4OKNljOffCly65BRyYlf2WdCffH2f9Fg=
+libdb.so/periph-gpioc v0.0.0-20240407075947-41ffd52931a1 h1:6B8sJbTqjofaAWS/b/V91xhgiDASRF6a4gU9kQLIgG4=
+libdb.so/periph-gpioc v0.0.0-20240407075947-41ffd52931a1/go.mod h1:bN/uLxqRHYj4OKNljOffCly65BRyYlf2WdCffH2f9Fg=
 periph.io/x/conn/v3 v3.6.7/go.mod h1:3OD27w9YVa5DS97VsUxsPGzD9Qrm5Ny7cF5b6xMMIWg=
 periph.io/x/conn/v3 v3.7.0 h1:f1EXLn4pkf7AEWwkol2gilCNZ0ElY+bxS4WE2PQXfrA=
 periph.io/x/conn/v3 v3.7.0/go.mod h1:ypY7UVxgDbP9PJGwFSVelRRagxyXYfttVh7hJZUHEhg=

@@ -17,7 +17,7 @@
 					version = self.rev or "dirty";
 					src = self;
 
-					vendorHash = "sha256-x7gOb/Ze0RyOw94ZplE3id51sIgab4F3hPjF8uutUlg=";
+					vendorHash = "sha256-sdEdoGNsUvPp/u+f3MrNCs30syH7AzmnhbohIJRwumE=";
 
 					meta = {
 						description = "DHT11/DHT22 Prometheus Exporter in Go.";

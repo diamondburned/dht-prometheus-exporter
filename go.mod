@@ -9,7 +9,7 @@ require (
 	github.com/prometheus/client_golang v1.19.0
 	github.com/spf13/pflag v1.0.5
 	libdb.so/hserve v0.0.0-20230404043009-95e112a6e0a5
-	libdb.so/periph-gpioc v0.0.0-20240407074043-7cf3d1d750c3
+	libdb.so/periph-gpioc v0.0.0-20240407075947-41ffd52931a1
 )
 
 require (
