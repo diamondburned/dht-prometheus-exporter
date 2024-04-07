@@ -42,6 +42,17 @@ const (
 	DHT22 SensorType = "DHT22"
 )
 
+func (t SensorType) toDHTConstant() string {
+	switch t {
+	case DHT11:
+		return "dht11"
+	case DHT22:
+		return "dht22"
+	default:
+		panic(fmt.Sprintf("unknown sensor type: %q", t))
+	}
+}
+
 // TemperatureUnit is the unit of temperature to use.
 type TemperatureUnit string
 

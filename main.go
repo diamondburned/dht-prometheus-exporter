@@ -64,7 +64,7 @@ func NewCollector(cfg *Config) (*Collector, error) {
 	dht, err := dht.NewDHT(
 		fmt.Sprintf("GPIO%d", cfg.GPIOPin),
 		cfg.TemperatureUnit.toDHTConstant(),
-		string(cfg.SensorType))
+		cfg.SensorType.toDHTConstant())
 	if err != nil {
 		return nil, fmt.Errorf("failed to create a new DHT11/DHT22 controller instance: %w", err)
 	}
