@@ -74,7 +74,7 @@ func NewCollector(cfg *Config) (*Collector, error) {
 		prometheus.NewDesc(
 			"dht_temperature",
 			"Temperature in the selected unit.",
-			[]string{"unit"},
+			nil,
 			joinMap(cfg.PrometheusLabels, map[string]string{
 				"pin":         cfg.PinName,
 				"sensor_type": string(cfg.SensorType),
