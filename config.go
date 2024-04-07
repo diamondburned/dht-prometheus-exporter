@@ -11,7 +11,7 @@ import (
 
 type Config struct {
 	ListenAddr       string            `json:"listen_addr"`
-	GPIOPin          int               `json:"gpio_pin"`
+	PinName          string            `json:"pin_name"`
 	SensorType       SensorType        `json:"sensor_type"`
 	TemperatureUnit  TemperatureUnit   `json:"temperature_unit"`
 	PrometheusLabels prometheus.Labels `json:"prometheus_labels,omitempty"`

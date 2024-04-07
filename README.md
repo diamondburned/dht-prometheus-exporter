@@ -15,7 +15,7 @@ sensor as Prometheus metrics.
 ```json
 {
   "listen_addr": ":9090", 
-  "gpio_pin": 4,
+  "pin_name": "GPIO4",
   "sensor_type": "DHT22",
   "temperature_unit": "celsius",
   "prometheus_labels": {

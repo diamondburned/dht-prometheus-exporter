@@ -14,7 +14,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/pflag"
 	"libdb.so/hserve"
-	"periph.io/x/host/v3"
+	"libdb.so/periph-gpioc/gpiodriver"
 )
 
 var (
@@ -32,12 +32,8 @@ func main() {
 		log.Fatalln("Failed to parse the configuration file:", err)
 	}
 
-	driver, err := host.Init()
-	if err != nil {
-		log.Fatalln("Failed to initialize the host driver:", err)
-	}
-	for _, loaded := range driver.Loaded {
-		log.Println("Loaded driver:", loaded)
+	if err := gpiodriver.Register(); err != nil {
+		log.Fatalln("Failed to register the GPIO driver:", err)
 	}
 
 	collector, err := NewCollector(cfg)
@@ -67,7 +63,7 @@ type Collector struct {
 
 func NewCollector(cfg *Config) (*Collector, error) {
 	dht, err := dht.NewDHT(
-		fmt.Sprintf("GPIO%d", cfg.GPIOPin),
+		cfg.PinName,
 		cfg.TemperatureUnit.toDHTConstant(),
 		cfg.SensorType.toDHTConstant())
 	if err != nil {
@@ -80,8 +76,8 @@ func NewCollector(cfg *Config) (*Collector, error) {
 			"Temperature in the selected unit.",
 			[]string{"unit"},
 			joinMap(cfg.PrometheusLabels, map[string]string{
+				"pin":         cfg.PinName,
 				"sensor_type": string(cfg.SensorType),
-				"gpio_pin":    fmt.Sprintf("%d", cfg.GPIOPin),
 				"unit":        string(cfg.TemperatureUnit),
 			}),
 		),
@@ -90,8 +86,8 @@ func NewCollector(cfg *Config) (*Collector, error) {
 			"Humidity percentage.",
 			nil,
 			joinMap(cfg.PrometheusLabels, map[string]string{
+				"pin":         cfg.PinName,
 				"sensor_type": string(cfg.SensorType),
-				"gpio_pin":    fmt.Sprintf("%d", cfg.GPIOPin),
 			}),
 		),
 	}
