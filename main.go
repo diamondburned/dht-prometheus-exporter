@@ -14,6 +14,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/pflag"
 	"libdb.so/hserve"
+	"periph.io/x/host/v3"
 )
 
 var (
@@ -29,6 +30,14 @@ func main() {
 	cfg, err := parseConfigFile(configFile)
 	if err != nil {
 		log.Fatalln("Failed to parse the configuration file:", err)
+	}
+
+	driver, err := host.Init()
+	if err != nil {
+		log.Fatalln("Failed to initialize the host driver:", err)
+	}
+	for _, loaded := range driver.Loaded {
+		log.Println("Loaded driver:", loaded)
 	}
 
 	collector, err := NewCollector(cfg)
@@ -57,10 +66,6 @@ type Collector struct {
 }
 
 func NewCollector(cfg *Config) (*Collector, error) {
-	if err := dht.HostInit(); err != nil {
-		return nil, fmt.Errorf("failed to initialize the DHT11/DHT22 driver: %w", err)
-	}
-
 	dht, err := dht.NewDHT(
 		fmt.Sprintf("GPIO%d", cfg.GPIOPin),
 		cfg.TemperatureUnit.toDHTConstant(),
