@@ -5,11 +5,11 @@ go 1.22.0
 toolchain go1.22.1
 
 require (
+	github.com/prokopparuzek/go-dht v0.1.1
 	github.com/prometheus/client_golang v1.19.0
 	github.com/spf13/pflag v1.0.5
 	libdb.so/hserve v0.0.0-20230404043009-95e112a6e0a5
-	libdb.so/periph-gpioc v0.0.0-20240407101408-78a7159403d6
-	periph.io/x/conn/v3 v3.7.0
+	libdb.so/periph-gpioc v0.0.0-20240407075947-41ffd52931a1
 )
 
 require (
@@ -21,4 +21,6 @@ require (
 	github.com/warthog618/go-gpiocdev v0.9.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
+	periph.io/x/conn/v3 v3.7.0 // indirect
+	periph.io/x/host/v3 v3.6.7 // indirect
 )

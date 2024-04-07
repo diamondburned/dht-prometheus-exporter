@@ -9,13 +9,12 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/prokopparuzek/go-dht"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/pflag"
-	"libdb.so/dht-prometheus-exporter/dht"
 	"libdb.so/hserve"
 	"libdb.so/periph-gpioc/gpiodriver"
-	"periph.io/x/conn/v3/gpio/gpioreg"
 )
 
 var (
@@ -58,43 +57,43 @@ func main() {
 
 // Collector is the DHT11/22 data collector for Prometheus.
 type Collector struct {
-	sensor  *dht.Sensor
+	dht     *dht.DHT
 	metrics [2]*prometheus.Desc
 }
 
 func NewCollector(cfg *Config) (*Collector, error) {
-	pin := gpioreg.ByName(cfg.PinName)
-	if pin == nil {
-		return nil, fmt.Errorf("failed to find the GPIO pin: %q", cfg.PinName)
-	}
-
-	sensor, err := dht.NewSensor(pin, cfg.SensorType)
+	dht, err := dht.NewDHT(
+		cfg.PinName,
+		cfg.TemperatureUnit.toDHTConstant(),
+		cfg.SensorType.toDHTConstant())
 	if err != nil {
 		return nil, fmt.Errorf("failed to create a new DHT11/DHT22 controller instance: %w", err)
 	}
 
-	labels := joinMap(cfg.PrometheusLabels, map[string]string{
-		"pin":         cfg.PinName,
-		"sensor_type": string(cfg.SensorType),
-	})
-
 	metrics := [2]*prometheus.Desc{
 		prometheus.NewDesc(
 			"dht_temperature",
-			"Temperature in celsius.",
+			"Temperature in the selected unit.",
 			nil,
-			labels,
+			joinMap(cfg.PrometheusLabels, map[string]string{
+				"pin":         cfg.PinName,
+				"sensor_type": string(cfg.SensorType),
+				"unit":        string(cfg.TemperatureUnit),
+			}),
 		),
 		prometheus.NewDesc(
 			"dht_humidity",
 			"Humidity percentage.",
 			nil,
-			labels,
+			joinMap(cfg.PrometheusLabels, map[string]string{
+				"pin":         cfg.PinName,
+				"sensor_type": string(cfg.SensorType),
+			}),
 		),
 	}
 
 	return &Collector{
-		sensor:  sensor,
+		dht:     dht,
 		metrics: metrics,
 	}, nil
 }
@@ -106,13 +105,13 @@ func (c *Collector) Describe(ch chan<- *prometheus.Desc) {
 }
 
 func (c *Collector) Collect(ch chan<- prometheus.Metric) {
-	t, h, err := c.sensor.Read(context.Background())
+	t, h, err := c.dht.ReadRetry(11)
 	if err != nil {
 		log.Println("Failed to read the DHT11/DHT22 sensor:", err)
 		return
 	}
-	ch <- prometheus.MustNewConstMetric(c.metrics[0], prometheus.GaugeValue, float64(t))
-	ch <- prometheus.MustNewConstMetric(c.metrics[1], prometheus.GaugeValue, float64(h))
+	ch <- prometheus.MustNewConstMetric(c.metrics[0], prometheus.GaugeValue, t)
+	ch <- prometheus.MustNewConstMetric(c.metrics[1], prometheus.GaugeValue, h)
 }
 
 func joinMap[K comparable, V any](values ...map[K]V) map[K]V {
