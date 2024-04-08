@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 	"maps"
 	"net/http"
 	"os"
@@ -105,11 +106,19 @@ func (c *Collector) Describe(ch chan<- *prometheus.Desc) {
 }
 
 func (c *Collector) Collect(ch chan<- prometheus.Metric) {
-	t, h, err := c.dht.ReadRetry(11)
+	t, h, err := c.dht.Read()
 	if err != nil {
-		log.Println("Failed to read the DHT11/DHT22 sensor:", err)
+		slog.Error(
+			"failed to read the DHT11/DHT22 sensor",
+			"err", err)
 		return
 	}
+
+	slog.Info(
+		"collected DHT11/DHT22 data",
+		"temperature", t,
+		"humidity", h)
+
 	ch <- prometheus.MustNewConstMetric(c.metrics[0], prometheus.GaugeValue, t)
 	ch <- prometheus.MustNewConstMetric(c.metrics[1], prometheus.GaugeValue, h)
 }
