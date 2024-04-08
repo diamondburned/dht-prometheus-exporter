@@ -106,7 +106,7 @@ func (c *Collector) Describe(ch chan<- *prometheus.Desc) {
 }
 
 func (c *Collector) Collect(ch chan<- prometheus.Metric) {
-	t, h, err := c.dht.Read()
+	h, t, err := c.dht.Read()
 	if err != nil {
 		slog.Error(
 			"failed to read the DHT11/DHT22 sensor",
