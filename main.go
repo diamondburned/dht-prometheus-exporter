@@ -46,7 +46,7 @@ func main() {
 	collectors.MustRegister(collector)
 
 	r := http.NewServeMux()
-	r.Handle("/metrics", promhttp.HandlerFor(collectors, promhttp.HandlerOpts{Registry: collectors}))
+	r.Handle("/metrics", promhttp.HandlerFor(collectors, promhttp.HandlerOpts{}))
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
